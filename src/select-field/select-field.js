@@ -14,11 +14,14 @@ export default class SelectField extends HTMLElement {
           font-size: var(--select-field-font-size, 14px);
           position: relative;
           display: inline-block;
+          margin-right: 8px;
+          margin-left: 8px;
         }
         
         #box-holder{
           cursor: pointer;
           border-bottom: solid 1px var(--select-field-border-bottom-color, #dddddd);
+          height: 43px;
         }
         .noselect{ 
           ${noselect}
@@ -27,7 +30,6 @@ export default class SelectField extends HTMLElement {
         #box{
           cursor: pointer;
           display: inline-block;
-          background-color: white;
           position: relative;
           padding: 4px;
           margin-right: 18px;
@@ -39,8 +41,9 @@ export default class SelectField extends HTMLElement {
           z-index: 1001;
           top: 0px;
           opacity: 1;
+          padding-top: 16px;
+          padding-bottom: 16px;
           transition: opacity 150ms linear;
-          border: solid 1px var(--select-field-selection-border-color, #cccccc);
           box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
         }
         
@@ -54,19 +57,38 @@ export default class SelectField extends HTMLElement {
         }
 
         .icon{
-          position: absolute;
-          top: 0px;
+          position: relative;
+          top: 5px;
           right: 0px;
+          ${noselect}
         }
 
         .dropdown{
           fill: var(--select-field-selection-border, #dddddd);
         }
 
+        #label{
+          position: fixed;
+          line-height: 22px;
+          transform: translateX(2px) translateY(-4px) scale(0.75);
+          z-index: 1;
+          transform-origin: left top 0px;
+          pointer-events: none;
+          color: rgba(0, 0, 0, 0.298039);
+          user-select: none;
+        }
+        #text{
+          padding: 0;
+          margin: 0;
+          padding-top: 6px;
+        }
       </style> 
       <div id="box-holder">
+        <label id="label"></label>
+        <div id="text">
         <label id="box" class="noselect"></label>
         <span class="icon"> ${dropdownArrow('dropdown')} </span>
+        </div>
       </div>
       <div id="selection" hide hidden>
         <slot></slot>
@@ -76,6 +98,7 @@ export default class SelectField extends HTMLElement {
     this.$box = this.shadowRoot.querySelector('#box');
     this.$boxHolder = this.shadowRoot.querySelector('#box-holder');
     this.$selection = this.shadowRoot.querySelector('#selection');
+    this.$label = this.shadowRoot.querySelector('#label');
   }
 
   static get observedAttributes() {
@@ -153,6 +176,7 @@ export default class SelectField extends HTMLElement {
 
     let initSelection = throttle(this._initSelection.bind(this), 50, this);
 
+    this.$label.textContent = this.getAttribute('placeholder');
     initSelection();
 
     slot.addEventListener('slotchange', () => {
@@ -179,5 +203,9 @@ export default class SelectField extends HTMLElement {
         }
       }))
     });
+    //Make sure that the select field has a min-width of the label field
+    let label = this.shadowRoot.querySelector('#label');
+    label.clientWidth;
+    this.$boxHolder.style.minWidth = `${label.clientWidth}px`;
   }
 }

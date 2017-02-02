@@ -10,12 +10,18 @@ export default class SelectOption extends HTMLElement {
     <style>
       :host{
         display:block;
-        padding: 6px;
+        padding-left: 24px;
+        padding-right: 24px;
+        padding-top: 0;
+        padding-bottom: 0;
         cursor: pointer;
         white-space: nowrap;
         background-color: white;
         transition: background-color 200ms ease-in;
         transition: color 100ms ease-in;
+        min-height: 32px;
+        line-height: 32px;
+        font-size: 15px;
         ${noselect}
       }
 
