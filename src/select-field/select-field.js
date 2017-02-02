@@ -10,8 +10,8 @@ export default class SelectField extends HTMLElement {
     sr.innerHTML = `
       <style>
         :host {
-          font-family: 'Roboto', sans-serif;
-          font-size: var(--select-field-font-size, 12px);
+          font-family: var(--select-field-font-family, 'Roboto', sans-serif);
+          font-size: var(--select-field-font-size, 14px);
           position: relative;
           display: inline-block;
         }
@@ -99,8 +99,10 @@ export default class SelectField extends HTMLElement {
     this.$box.textContent = newValue;
   }
 
-  _onDocumentMouseDown(e) {
-    if (this.contains(e.target)) {
+  _onDocumentMouseUp(e) {
+
+    let firstPathNode = e.path ? e.path[0] : null;
+    if (this.contains(e.target) || this.contains(firstPathNode) || this.shadowRoot.contains(firstPathNode)) {
       return;
     }
 
@@ -113,7 +115,7 @@ export default class SelectField extends HTMLElement {
       this.$selection.setAttribute('hidden', '')
     }, 200);
 
-    document.removeEventListener('mouseup', this._onDocumentMouseDown);
+    document.removeEventListener('mouseup', this._onDocumentMouseUp);
   }
 
   _showSelection() {
@@ -122,12 +124,11 @@ export default class SelectField extends HTMLElement {
       setTimeout(() => {
         this.$selection.removeAttribute('hide');
       }, 1);
-      document.addEventListener('mouseup', this._onDocumentMouseDown.bind(this));
+      document.addEventListener('mouseup', this._onDocumentMouseUp.bind(this));
     }
   }
 
   _initSelection() {
-    console.log('initselection...');
     let options = this.querySelectorAll('select-option[selected]');
     this._select(options.length >= 1 ? options[0] : null);
   }
@@ -141,6 +142,7 @@ export default class SelectField extends HTMLElement {
 
     if (node) {
       node.setAttribute('selected', '');
+      this.$box.textContent = node.textContent;
     }
     this._currentSelection = node;
   }
@@ -150,6 +152,8 @@ export default class SelectField extends HTMLElement {
     const slot = this.shadowRoot.querySelector('slot');
 
     let initSelection = throttle(this._initSelection.bind(this), 50, this);
+
+    initSelection();
 
     slot.addEventListener('slotchange', () => {
       console.log('slotchange...')

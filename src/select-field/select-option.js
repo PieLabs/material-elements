@@ -23,7 +23,7 @@ export default class SelectOption extends HTMLElement {
         background-color: var(--select-option-hover-bg-color, #eeeeee);
       }
 
-      :host-context([selected]){
+      :host([selected]){
         color: var(--select-option-selected-color, rgb(255, 64, 129));
       }
     </style>
