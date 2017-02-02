@@ -1,0 +1,16 @@
+{
+  "name": "material-elements",
+  "version": "0.0.1",
+  "description": "Some material-ey elements in vanilla js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^2.2.1"
+  },
+  "dependencies": {}
+}
