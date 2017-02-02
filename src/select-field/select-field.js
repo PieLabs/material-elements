@@ -68,7 +68,7 @@ export default class SelectField extends HTMLElement {
         }
 
         #label{
-          position: fixed;
+          position: absolute;
           line-height: 22px;
           transform: translateX(2px) translateY(-4px) scale(0.75);
           z-index: 1;

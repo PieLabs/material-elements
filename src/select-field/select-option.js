@@ -18,7 +18,6 @@ export default class SelectOption extends HTMLElement {
         white-space: nowrap;
         background-color: white;
         transition: background-color 200ms ease-in;
-        transition: color 100ms ease-in;
         min-height: 32px;
         line-height: 32px;
         font-size: 15px;
