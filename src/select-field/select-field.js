@@ -123,7 +123,6 @@ export default class SelectField extends HTMLElement {
   }
 
   _onDocumentMouseUp(e) {
-
     let firstPathNode = e.path ? e.path[0] : null;
     if (this.contains(e.target) || this.contains(firstPathNode) || this.shadowRoot.contains(firstPathNode)) {
       return;
@@ -147,7 +146,9 @@ export default class SelectField extends HTMLElement {
       setTimeout(() => {
         this.$selection.removeAttribute('hide');
       }, 1);
-      document.addEventListener('mouseup', this._onDocumentMouseUp.bind(this));
+      setTimeout(() => {
+        document.addEventListener('mouseup', this._onDocumentMouseUp);
+      }, 200);
     }
   }
 
