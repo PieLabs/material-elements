@@ -1,13 +1,8 @@
 import { dropdownArrow } from './icons';
 import throttle from './throttle';
-import { noselect } from './styles';
+import { noselect, prepareTemplate, applyStyle } from './styles';
 
-export default class SelectField extends HTMLElement {
-
-  constructor() {
-    super();
-    let sr = this.attachShadow({ mode: 'open' });
-    sr.innerHTML = `
+const template = prepareTemplate(`
       <style>
         :host {
           font-family: var(--select-field-font-family, 'Roboto', sans-serif);
@@ -93,7 +88,13 @@ export default class SelectField extends HTMLElement {
       <div id="selection" hide hidden>
         <slot></slot>
       </div>
-    `;
+`, 'select-field');
+
+export default class SelectField extends HTMLElement {
+
+  constructor() {
+    super();
+    let sr = applyStyle(el, template);
 
     this.$box = this.shadowRoot.querySelector('#box');
     this.$boxHolder = this.shadowRoot.querySelector('#box-holder');

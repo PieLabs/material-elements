@@ -1,12 +1,6 @@
-import { noselect } from './styles';
+import { noselect, prepareTemplate, applyStyle } from './styles';
 
-export default class SelectOption extends HTMLElement {
-  constructor() {
-    super();
-
-    let sr = this.attachShadow({ mode: 'open' });
-
-    sr.innerHTML = `
+const template = prepareTemplate(`
     <style>
       :host{
         display:block;
@@ -33,7 +27,14 @@ export default class SelectOption extends HTMLElement {
       }
     </style>
     <slot></slot>
-    `;
+
+`, 'select-option');
+
+export default class SelectOption extends HTMLElement {
+  constructor() {
+    super();
+
+    let sr = applyStyle(this, template);
 
     this.addEventListener('click', e => {
       this.dispatchEvent(new CustomEvent('select-option-click', {
