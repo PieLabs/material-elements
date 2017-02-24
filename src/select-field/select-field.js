@@ -94,7 +94,7 @@ export default class SelectField extends HTMLElement {
 
   constructor() {
     super();
-    let sr = applyStyle(el, template);
+    let sr = applyStyle(this, template);
 
     this.$box = this.shadowRoot.querySelector('#box');
     this.$boxHolder = this.shadowRoot.querySelector('#box-holder');
