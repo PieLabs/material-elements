@@ -138,7 +138,7 @@ export default class SelectField extends HTMLElement {
       this.$selection.setAttribute('hidden', '')
     }, 200);
 
-    document.removeEventListener('mouseup', this._onDocumentMouseUp);
+    document.removeEventListener('mouseup', this._mouseUpFn);
   }
 
   _showSelection() {
@@ -148,7 +148,13 @@ export default class SelectField extends HTMLElement {
         this.$selection.removeAttribute('hide');
       }, 1);
       setTimeout(() => {
-        document.addEventListener('mouseup', this._onDocumentMouseUp);
+        if (!this._mouseUpFn) {
+          //FF: need to bind the event listener
+          this._mouseUpFn = this._onDocumentMouseUp.bind(this);
+        }
+
+        document.removeEventListener('mouseup', this._mouseUpFn);
+        document.addEventListener('mouseup', this._mouseUpFn);
       }, 200);
     }
   }
@@ -190,11 +196,13 @@ export default class SelectField extends HTMLElement {
       this._showSelection();
     });
 
-    this.shadowRoot.addEventListener('select-option-click', e => {
+    let onClick = (e) => {
+      console.log('select-option-click:', e.target);
       e.preventDefault();
       e.stopImmediatePropagation();
       this.$box.textContent = e.detail.label;
       this._hideSelection();
+      console.log('select-option-click:', e.target);
       this._select(e.target);
       this.dispatchEvent(new CustomEvent('change', {
         bubbles: true,
@@ -204,7 +212,14 @@ export default class SelectField extends HTMLElement {
           label: e.target.textContent
         }
       }))
-    });
+    };
+
+    let onClickBound = onClick.bind(this);
+    this.shadowRoot.addEventListener('select-option-click', onClickBound);
+
+    //polyfill - nned to listen directly to the element also
+    this.addEventListener('select-option-click', onClickBound);
+
     //Make sure that the select field has a min-width of the label field
     let label = this.shadowRoot.querySelector('#label');
     label.clientWidth;
