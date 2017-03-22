@@ -1,6 +1,6 @@
 {
   "name": "material-elements",
-  "version": "0.0.1",
+  "version": "0.1.0-prerelease",
   "description": "Some material-ey elements in vanilla js",
   "main": "index.js",
   "scripts": {
